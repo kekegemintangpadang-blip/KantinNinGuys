@@ -1,0 +1,41 @@
+/* KantinNinGuys - CSS Pendukung Modul Orang 3 */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #333333;
+}
+
+.payment-option {
+    transition: all 0.2s ease-in-out;
+    background-color: #ffffff;
+}
+
+.payment-option:hover {
+    border-color: #dc3545 !important;
+    background-color: #fff9f9;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.qty-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+@media print {
+    body {
+        background-color: #ffffff !important;
+    }
+    .btn, nav, .breadcrumb {
+        display: none !important;
+    }
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
+}
