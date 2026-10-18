@@ -235,6 +235,24 @@ $tanggal = date('d M Y, H:i', strtotime($order['created_at']));
                     <?php endif; ?>
                 </div>
 
+                <?php if (($payment['metode'] ?? '') === 'qris_manual' && ($payment['status_bayar'] ?? 'menunggu') !== 'berhasil'): ?>
+                <!-- Pembayaran QRIS -->
+                <div class="text-center border rounded p-3 mb-4">
+                    <h6 class="fw-bold mb-1"><i class="bi bi-qr-code-scan me-2 text-primary"></i>Bayar dengan QRIS</h6>
+                    <p class="small text-muted mb-2">
+                        Scan QRIS di bawah dan bayar sebesar
+                        <strong class="text-danger">Rp <?= number_format($order['total'], 0, ',', '.') ?></strong>.
+                        Tunjukkan bukti pembayaran beserta nomor pesanan ke kasir.
+                    </p>
+                    <img src="assets/img/qris-kantinninguys.png" alt="QRIS KantinNinGuys" class="img-fluid rounded border" style="max-width: 300px;">
+                    <div class="mt-2 no-print">
+                        <a href="assets/img/qris-kantinninguys.png" download="QRIS-KantinNinGuys.png" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-download me-1"></i>Simpan Gambar QRIS
+                        </a>
+                    </div>
+                </div>
+                <?php endif; ?>
+
                 <!-- Tombol Aksi -->
                 <div class="d-grid gap-2 no-print">
                     <button class="btn btn-outline-secondary" onclick="window.print()">
