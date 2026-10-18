@@ -361,13 +361,30 @@ function processCheckout() {
                      `Total Pembayaran: ${totalPayment}`;
 
     if (paymentMethod === 'QRIS') {
-        successMsg += `\n\nSilakan lakukan scan QRIS pada layar berikutnya atau tunjukkan bukti transfer ke tenant kantin.`;
-    } else {
-        successMsg += `\n\nSilakan siapkan uang pas atau bayar langsung di kasir tenant kantin.`;
+        successMsg += `\n\nTunjukkan bukti pembayaran QRIS ke tenant kantin untuk diverifikasi saat mengambil pesanan.`;
+        pendingOrderMessage = successMsg;
+        // Tampilkan layar QRIS; pesanan dibuat setelah pembeli menekan "Saya Sudah Bayar"
+        document.getElementById("qris-total").innerText = totalPayment;
+        document.getElementById("qris-modal").classList.remove("hidden");
+        return;
     }
 
-    alert(successMsg);
-    
+    successMsg += `\n\nSilakan siapkan uang pas atau bayar langsung di kasir tenant kantin.`;
+    pendingOrderMessage = successMsg;
+    finalizeOrder();
+}
+
+let pendingOrderMessage = '';
+
+function closeQrisModal() {
+    document.getElementById("qris-modal").classList.add("hidden");
+}
+
+function finalizeOrder() {
+    closeQrisModal();
+    alert(pendingOrderMessage);
+    pendingOrderMessage = '';
+
     cart = [];
     document.getElementById("buyer-phone").value = "";
     updateCartUI();
