@@ -183,9 +183,27 @@ unset($_SESSION['error']);
                             <label class="form-check-label w-100 cursor-pointer" for="metode_qris">
                                 <div>
                                     <span class="fw-bold d-block"><i class="bi bi-qr-code-scan text-primary me-2"></i>QRIS Kantin (Verifikasi Manual)</span>
-                                    <small class="text-muted">Scan QRIS statis di etalase kasir stand saat mengambil makanan.</small>
+                                    <small class="text-muted">Scan QRIS KantinNinGuys dengan GoPay, BCA, Mandiri, BNI, BRI, atau e-wallet lainnya.</small>
                                 </div>
                             </label>
+
+                            <!-- Panel QRIS (muncul saat metode QRIS dipilih) -->
+                            <div id="qris-panel" class="text-center mt-3 pt-3 border-top" style="display:none;">
+                                <p class="small fw-semibold mb-1">Scan QRIS di bawah ini untuk membayar</p>
+                                <p class="mb-2">Nominal: <span class="fw-bold text-danger">Rp <?= number_format($total_bayar, 0, ',', '.') ?></span></p>
+                                <a href="assets/img/qris-kantinninguys.png" target="_blank" rel="noopener">
+                                    <img src="assets/img/qris-kantinninguys.png" alt="QRIS KantinNinGuys" class="img-fluid rounded border shadow-sm" style="max-width: 320px;">
+                                </a>
+                                <div class="mt-2">
+                                    <a href="assets/img/qris-kantinninguys.png" download="QRIS-KantinNinGuys.png" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-download me-1"></i>Simpan Gambar QRIS
+                                    </a>
+                                </div>
+                                <small class="text-muted d-block mt-2">
+                                    Masukkan nominal sesuai total pesanan, lalu klik <strong>Konfirmasi &amp; Buat Pesanan</strong>.
+                                    Tunjukkan bukti pembayaran ke kasir saat mengambil pesanan.
+                                </small>
+                            </div>
                         </div>
 
                         <div class="form-check payment-option p-3 border rounded">
@@ -251,6 +269,18 @@ unset($_SESSION['error']);
     </div>
 
     <script>
+    // Tampilkan gambar QRIS hanya saat metode QRIS dipilih
+    (function () {
+        const panel = document.getElementById('qris-panel');
+        const radios = document.querySelectorAll('input[name="metode"]');
+        function toggleQris() {
+            const qris = document.getElementById('metode_qris');
+            panel.style.display = qris && qris.checked ? 'block' : 'none';
+        }
+        radios.forEach(r => r.addEventListener('change', toggleQris));
+        toggleQris();
+    })();
+
     // Pencegahan pengiriman formulir berulang yang tidak disengaja (Ketentuan E.9)
     function handleFormSubmit(form) {
         const btn = document.getElementById('btn-submit-order');
