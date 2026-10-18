@@ -354,6 +354,43 @@
         </div>
     </div>
 
+    <!-- MODAL PEMBAYARAN QRIS -->
+    <div id="qris-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-5 sm:p-6 relative shadow-2xl border border-gray-100 dark:border-slate-700 flex flex-col max-h-[92vh]">
+            <button onclick="closeQrisModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="flex items-center space-x-2 mb-3 pb-3 border-b border-gray-100 dark:border-slate-700">
+                <i class="fa-solid fa-qrcode text-brandPink text-xl"></i>
+                <h3 class="font-bold text-lg text-gray-800 dark:text-gray-100">Bayar dengan QRIS</h3>
+            </div>
+
+            <div class="overflow-y-auto flex-grow text-center">
+                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Total yang harus dibayar</p>
+                <p id="qris-total" class="text-2xl font-extrabold text-brandPink mb-3">Rp 0</p>
+
+                <img src="qris-kantinninguys.png" alt="QRIS KantinNinGuys" class="mx-auto max-h-[50vh] w-auto object-contain rounded-xl border border-gray-200 dark:border-slate-600 shadow-sm bg-white">
+
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-3">
+                    Scan dengan GoPay, BCA, Mandiri, BNI, BRI, atau e-wallet lainnya, lalu masukkan nominal sesuai total di atas.
+                </p>
+                <a href="qris-kantinninguys.png" download="QRIS-KantinNinGuys.png" class="inline-flex items-center space-x-1.5 mt-2 text-xs font-semibold text-brandPink hover:underline">
+                    <i class="fa-solid fa-download"></i><span>Simpan gambar QRIS</span>
+                </a>
+            </div>
+
+            <div class="pt-4 space-y-2">
+                <button onclick="finalizeOrder()" class="w-full bg-brandPink text-white py-3 rounded-2xl font-bold text-sm hover:bg-[#e05670] transition-all shadow-md flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Saya Sudah Bayar</span>
+                </button>
+                <button onclick="closeQrisModal()" class="w-full py-2 rounded-2xl font-semibold text-xs text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 transition-all">
+                    Kembali ke Keranjang
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Login Generik -->
     <div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 sm:p-8 relative shadow-xl border border-gray-100 dark:border-slate-700">
