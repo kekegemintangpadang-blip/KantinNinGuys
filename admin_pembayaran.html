@@ -34,7 +34,7 @@
             border-bottom: 1px solid #ddd;
         }
         th {
-            background-color: #f89a20; /* Warna tema KantinNinGuys */
+            background-color: #f89a20; /* Warna tema  */
             color: white;
         }
         .badge {
@@ -86,7 +86,7 @@
 
     <script>
         // 1. Pengecekan Akses (Hanya Admin yang bisa akses)
-        // Simulasi pengecekan role (Dalam aplikasi asli, ini didapat dari session/database PHP)
+        // Simulasi pengecekan role (didapat dari session/database PHP)
         const userRole = localStorage.getItem('role') || 'admin'; // Anggap saat ini login sebagai admin
         
         if (userRole !== 'admin') {
