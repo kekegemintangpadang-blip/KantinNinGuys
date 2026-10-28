@@ -12,7 +12,7 @@
             padding: 20px;
         }
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: auto;
             background: white;
             padding: 20px;
@@ -23,6 +23,13 @@
             color: #333;
             text-align: center;
         }
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: #ff758f;
+            font-weight: bold;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -32,16 +39,17 @@
             padding: 12px;
             text-align: center;
             border-bottom: 1px solid #ddd;
+            font-size: 14px;
         }
         th {
-            background-color: #f89a20; /* Warna tema  */
+            background-color: #ff758f; /* Warna tema KantinNinGuys */
             color: white;
         }
         .badge {
             padding: 5px 10px;
             border-radius: 15px;
             color: white;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
         }
         .bg-menunggu { background-color: #f39c12; }
@@ -59,96 +67,130 @@
         }
         .btn-terima { background-color: #2ecc71; }
         .btn-tolak { background-color: #e74c3c; }
+        .btn-bukti { background-color: #3498db; text-decoration: none; display: inline-block;}
         .btn:hover { opacity: 0.8; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h2>Kelola Pembayaran Kantin</h2>
+        <a href="index.html" class="nav-back">← Kembali ke Katalog</a>
+        <h2>Kelola Pembayaran & Pesanan KantinNinGuys</h2>
         
         <table id="tabelPembayaran">
             <thead>
                 <tr>
                     <th>ID Pesanan</th>
+                    <th>No. WhatsApp</th>
                     <th>Metode</th>
-                    <th>Jumlah (Rp)</th>
-                    <th>Tanggal Bayar</th>
+                    <th>Total (Rp)</th>
+                    <th>Waktu / Tanggal</th>
+                    <th>Bukti Bayar</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody id="dataPembayaran">
-                <!-- Data akan dirender oleh JavaScript -->
+                <!-- Data akan dirender secara dinamis dari localStorage -->
             </tbody>
         </table>
     </div>
 
     <script>
-        // 1. Pengecekan Akses (Hanya Admin yang bisa akses)
-        // Simulasi pengecekan role (didapat dari session/database PHP)
-        const userRole = localStorage.getItem('role') || 'admin'; // Anggap saat ini login sebagai admin
-        
+        // 1. Pengecekan Akses Admin
+        const userRole = localStorage.getItem('role') || 'admin'; 
         if (userRole !== 'admin') {
-            alert("Akses Ditolak! Halaman ini hanya untuk Admin Kantin.");
-            window.location.href = "index.html"; // Arahkan kembali ke halaman utama
+            alert("Akses Ditolak! Halaman ini khusus untuk Admin Kantin.");
+            window.location.href = "index.html";
         }
 
-        // 2. Data Dummy Pembayaran (Sesuai tabel payments di database)
-        let payments = [
-            { id: 1, order_id: "ORD-1001", metode: "QRIS", jumlah: 25000, tanggal: "2026-10-26", status: "menunggu" },
-            { id: 2, order_id: "ORD-1002", metode: "Tunai", jumlah: 15000, tanggal: "2026-10-26", status: "menunggu" },
-            { id: 3, order_id: "ORD-1003", metode: "Transfer Bank", jumlah: 30000, tanggal: "2026-10-25", status: "berhasil" }
-        ];
+        // 2. Mengambil data transaksi dari localStorage ('kng_history') yang dikirim pembeli
+        function getAdminPayments() {
+            const history = JSON.parse(localStorage.getItem('kng_history')) || [];
+            
+            // Jika localStorage kosong, sediakan data default yang hanya berisi QRIS & Tunai (Tanpa Transfer Bank)
+            if (history.length === 0) {
+                return [
+                    { id: "KNG-100101", phone: "081234567890", payment: "QRIS", summary: { total: 25000 }, date: "26/10/2026 12:00:00", status: "menunggu", paymentProof: null },
+                    { id: "KNG-100102", phone: "089876543210", payment: "Cash", summary: { total: 18000 }, date: "26/10/2026 12:30:00", status: "menunggu", paymentProof: null }
+                ];
+            }
 
-        // 3. Fungsi untuk menampilkan data ke tabel
+            // Pastikan setiap data dari riwayat memiliki status default 'menunggu' jika belum diverifikasi admin
+            return history.map(item => ({
+                ...item,
+                status: item.status || "menunggu"
+            }));
+        }
+
+        // 3. Fungsi untuk menampilkan data ke tabel admin
         function renderTabel() {
             const tbody = document.getElementById("dataPembayaran");
+            const payments = getAdminPayments();
             tbody.innerHTML = ""; 
 
-            payments.forEach(payment => {
-                // Menentukan warna badge status
-                let badgeClass = payment.status === 'menunggu' ? 'bg-menunggu' : 
-                                 payment.status === 'berhasil' ? 'bg-berhasil' : 'bg-ditolak';
+            if (payments.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#777; padding:20px;">Belum ada transaksi masuk.</td></tr>`;
+                return;
+            }
+
+            payments.forEach((payment, index) => {
+                let currentStatus = payment.status || "menunggu";
+                let badgeClass = currentStatus === 'menunggu' ? 'bg-menunggu' : 
+                                 currentStatus === 'berhasil' ? 'bg-berhasil' : 'bg-ditolak';
                 
-                // Menentukan tombol aksi (Hanya muncul jika status masih 'menunggu')
+                let totalAmount = payment.summary ? payment.summary.total : (payment.total || 0);
+                let paymentMethod = payment.payment || 'QRIS'; // Hanya QRIS atau Cash/Tunai
+                
+                // Tombol Lihat Bukti Bayar (jika ada file gambar QRIS)
+                let buktiBtn = payment.paymentProof 
+                    ? `<a href="${payment.paymentProof}" target="_blank" class="btn btn-bukti">Lihat Bukti</a>` 
+                    : `<span style="color:#999; font-size:12px;">Tanpa Bukti (Tunai)</span>`;
+
+                // Tombol Aksi Terima/Tolak
                 let actionButtons = "";
-                if(payment.status === "menunggu") {
+                if(currentStatus === "menunggu") {
                     actionButtons = `
-                        <button class="btn btn-terima" onclick="updateStatus(${payment.id}, 'berhasil')">Terima</button>
-                        <button class="btn btn-tolak" onclick="updateStatus(${payment.id}, 'ditolak')">Tolak</button>
+                        <button class="btn btn-terima" onclick="updateStatus('${payment.id}', 'berhasil')">Terima</button>
+                        <button class="btn btn-tolak" onclick="updateStatus('${payment.id}', 'ditolak')">Tolak</button>
                     `;
                 } else {
-                    actionButtons = `<span>-</span>`;
+                    actionButtons = `<span>Selesai</span>`;
                 }
 
                 const row = `<tr>
-                                <td>${payment.order_id}</td>
-                                <td>${payment.metode}</td>
-                                <td>Rp ${payment.jumlah.toLocaleString('id-ID')}</td>
-                                <td>${payment.tanggal}</td>
-                                <td><span class="badge ${badgeClass}">${payment.status.toUpperCase()}</span></td>
+                                <td><b>${payment.id}</b></td>
+                                <td>${payment.phone || '-'}</td>
+                                <td>${paymentMethod}</td>
+                                <td>Rp ${totalAmount.toLocaleString('id-ID')}</td>
+                                <td>${payment.date || '-'}</td>
+                                <td>${buktiBtn}</td>
+                                <td><span class="badge ${badgeClass}">${currentStatus.toUpperCase()}</span></td>
                                 <td>${actionButtons}</td>
                              </tr>`;
                 tbody.innerHTML += row;
             });
         }
 
-        // 4. Fungsi untuk memperbarui status pembayaran
-        function updateStatus(id, statusBaru) {
-            const confirmMsg = statusBaru === 'berhasil' ? "Terima pembayaran ini?" : "Tolak pembayaran ini?";
+        // 4. Fungsi untuk memperbarui status pembayaran dan menyimpannya ke localStorage
+        function updateStatus(orderId, statusBaru) {
+            const confirmMsg = statusBaru === 'berhasil' ? "Terima pembayaran pesanan ini?" : "Tolak pembayaran pesanan ini?";
             if(confirm(confirmMsg)) {
-                // Cari data berdasarkan ID dan ubah statusnya
-                const paymentIndex = payments.findIndex(p => p.id === id);
-                if(paymentIndex !== -1) {
-                    payments[paymentIndex].status = statusBaru;
-                    renderTabel(); // Render ulang tabel setelah status diupdate
+                let history = JSON.parse(localStorage.getItem('kng_history')) || [];
+                const index = history.findIndex(p => p.id === orderId);
+                
+                if(index !== -1) {
+                    history[index].status = statusBaru;
+                    localStorage.setItem('kng_history', JSON.stringify(history));
+                    renderTabel(); 
                     alert("Status pembayaran berhasil diperbarui!");
+                } else {
+                    alert("Data transaksi tidak ditemukan di penyimpanan lokal.");
                 }
             }
         }
 
-        // Panggil fungsi render pertama kali saat halaman dimuat
+        // Muat tabel saat halaman dibuka
         renderTabel();
     </script>
 </body>
