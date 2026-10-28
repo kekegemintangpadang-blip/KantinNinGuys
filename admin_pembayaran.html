@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Pembayaran - Admin KantinNinGuys</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f89a20; /* Warna tema KantinNinGuys */
+            color: white;
+        }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .bg-menunggu { background-color: #f39c12; }
+        .bg-berhasil { background-color: #2ecc71; }
+        .bg-ditolak { background-color: #e74c3c; }
+        
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 2px;
+            color: white;
+        }
+        .btn-terima { background-color: #2ecc71; }
+        .btn-tolak { background-color: #e74c3c; }
+        .btn:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Kelola Pembayaran Kantin</h2>
+        
+        <table id="tabelPembayaran">
+            <thead>
+                <tr>
+                    <th>ID Pesanan</th>
+                    <th>Metode</th>
+                    <th>Jumlah (Rp)</th>
+                    <th>Tanggal Bayar</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="dataPembayaran">
+                <!-- Data akan dirender oleh JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // 1. Pengecekan Akses (Hanya Admin yang bisa akses)
+        // Simulasi pengecekan role (Dalam aplikasi asli, ini didapat dari session/database PHP)
+        const userRole = localStorage.getItem('role') || 'admin'; // Anggap saat ini login sebagai admin
+        
+        if (userRole !== 'admin') {
+            alert("Akses Ditolak! Halaman ini hanya untuk Admin Kantin.");
+            window.location.href = "index.html"; // Arahkan kembali ke halaman utama
+        }
+
+        // 2. Data Dummy Pembayaran (Sesuai tabel payments di database)
+        let payments = [
+            { id: 1, order_id: "ORD-1001", metode: "QRIS", jumlah: 25000, tanggal: "2026-10-26", status: "menunggu" },
+            { id: 2, order_id: "ORD-1002", metode: "Tunai", jumlah: 15000, tanggal: "2026-10-26", status: "menunggu" },
+            { id: 3, order_id: "ORD-1003", metode: "Transfer Bank", jumlah: 30000, tanggal: "2026-10-25", status: "berhasil" }
+        ];
+
+        // 3. Fungsi untuk menampilkan data ke tabel
+        function renderTabel() {
+            const tbody = document.getElementById("dataPembayaran");
+            tbody.innerHTML = ""; 
+
+            payments.forEach(payment => {
+                // Menentukan warna badge status
+                let badgeClass = payment.status === 'menunggu' ? 'bg-menunggu' : 
+                                 payment.status === 'berhasil' ? 'bg-berhasil' : 'bg-ditolak';
+                
+                // Menentukan tombol aksi (Hanya muncul jika status masih 'menunggu')
+                let actionButtons = "";
+                if(payment.status === "menunggu") {
+                    actionButtons = `
+                        <button class="btn btn-terima" onclick="updateStatus(${payment.id}, 'berhasil')">Terima</button>
+                        <button class="btn btn-tolak" onclick="updateStatus(${payment.id}, 'ditolak')">Tolak</button>
+                    `;
+                } else {
+                    actionButtons = `<span>-</span>`;
+                }
+
+                const row = `<tr>
+                                <td>${payment.order_id}</td>
+                                <td>${payment.metode}</td>
+                                <td>Rp ${payment.jumlah.toLocaleString('id-ID')}</td>
+                                <td>${payment.tanggal}</td>
+                                <td><span class="badge ${badgeClass}">${payment.status.toUpperCase()}</span></td>
+                                <td>${actionButtons}</td>
+                             </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // 4. Fungsi untuk memperbarui status pembayaran
+        function updateStatus(id, statusBaru) {
+            const confirmMsg = statusBaru === 'berhasil' ? "Terima pembayaran ini?" : "Tolak pembayaran ini?";
+            if(confirm(confirmMsg)) {
+                // Cari data berdasarkan ID dan ubah statusnya
+                const paymentIndex = payments.findIndex(p => p.id === id);
+                if(paymentIndex !== -1) {
+                    payments[paymentIndex].status = statusBaru;
+                    renderTabel(); // Render ulang tabel setelah status diupdate
+                    alert("Status pembayaran berhasil diperbarui!");
+                }
+            }
+        }
+
+        // Panggil fungsi render pertama kali saat halaman dimuat
+        renderTabel();
+    </script>
+</body>
+</html>
