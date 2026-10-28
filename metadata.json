@@ -1,6 +1,0 @@
-{
-  "name": "KantinNinGuys - Keranjang, Checkout & Pembayaran",
-  "description": "Sistem Keranjang Belanja, Checkout, dan Pembayaran Kantin Kampus KantinNinGuys (Orang 3) dengan PHP, PDO MySQL Transaction, dan Bootstrap 5.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
