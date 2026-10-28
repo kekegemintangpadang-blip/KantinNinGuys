@@ -1,52 +1,43 @@
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KantinNinGuys - Keranjang Belanja</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config={darkMode:'class',theme:{extend:{colors:{brandPink:'#ff758f',brandLightPink:'#fff0f3',brandSoftPink:'#ffb3c1',brandBorder:'#ffccd5'},fontFamily:{sans:['Poppins','sans-serif']}}}}
-</script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="js/theme.js"></script>
-<style>.hidden{display:none !important}</style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KantinNinGuys - Keranjang Belanja</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brandPink: '#ff758f',
+                        brandLightPink: '#fff0f3',
+                        brandSoftPink: '#ffb3c1',
+                        brandBorder: '#ffccd5',
+                        textDark: '#2d3748'
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'Quicksand', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="js/theme.js"></script>
+
+<style> .hidden { display:none !important; } </style>
+
 </head>
-<body class="bg-gray-50 dark:bg-slate-900 text-gray-700 dark:text-gray-100 font-sans antialiased min-h-screen text-sm sm:text-base">
+<body class="bg-gray-50 dark:bg-slate-900 text-textDark dark:text-gray-100 font-sans antialiased min-h-screen transition-colors duration-300 text-sm sm:text-base">
 
-<header class="bg-white dark:bg-slate-800 sticky top-0 z-40 border-b border-gray-100 dark:border-slate-700 shadow-sm">
-  <div class="max-w-3xl mx-auto px-4 h-20 flex items-center justify-between">
-    <a href="index.html" class="bg-gradient-to-r from-brandPink to-brandSoftPink text-white px-4 py-2.5 rounded-2xl flex items-center space-x-2 font-bold text-lg">
-      <i class="fa-solid fa-utensils"></i><span>KantinNinGuys</span>
-    </a>
-    <a id="back" href="index.html" class="text-sm font-semibold hover:text-brandPink"><i class="fa-solid fa-arrow-left mr-1"></i><span>Kembali Ke Menu</span></a>
-  </div>
-</header>
-
-<main class="max-w-2xl mx-auto px-4 py-8">
-  <!-- KERANJANG -->
-  <div id="page-cart" class="space-y-6">
-    <h1 class="flex items-center space-x-3 text-2xl font-bold"><i class="fa-solid fa-basket-shopping text-brandPink"></i><span>Keranjang Belanja</span></h1>
-    <div id="cart-container" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 space-y-4"></div>
-    <div id="cart-summary-panel" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 space-y-4">
-      <b class="block text-sm">Pilih Metode Pengambilan:</b>
-      <div class="grid grid-cols-2 gap-3">
-        <label class="cursor-pointer border border-gray-200 dark:border-slate-600 p-3 rounded-2xl flex items-center justify-center space-x-2 font-bold text-sm has-[:checked]:border-2 has-[:checked]:border-brandPink has-[:checked]:bg-brandLightPink/30 dark:has-[:checked]:bg-slate-700"><input type="radio" name="delivery" value="pickup" checked onchange="setDelivery('pickup')" class="accent-brandPink"><span>Ambil Sendiri (Gratis)</span></label>
-        <label class="cursor-pointer border border-gray-200 dark:border-slate-600 p-3 rounded-2xl flex items-center justify-center space-x-2 font-bold text-sm has-[:checked]:border-2 has-[:checked]:border-brandPink has-[:checked]:bg-brandLightPink/30 dark:has-[:checked]:bg-slate-700"><input type="radio" name="delivery" value="delivery" onchange="setDelivery('delivery')" class="accent-brandPink"><span>Diantar (+Rp 5.000)</span></label>
-      </div>
-      <div class="pt-2 border-t border-gray-100 dark:border-slate-700 space-y-1.5">
-        <div class="flex justify-between gap-3"><span>Subtotal Makanan:</span><b id="subtotal-text">Rp 0</b></div>
-        <div class="flex justify-between gap-3"><span>Ongkos Kirim:</span><b id="delivery-cost-text">Rp 0</b></div>
-        <div id="discount-row" class="flex justify-between gap-3 text-emerald-600 font-semibold hidden"><span>Diskon Promo (>50K):</span><span>-Rp 5.000</span></div>
-        <div class="flex justify-between gap-3 text-lg font-bold pt-2 border-t border-gray-100 dark:border-slate-700"><span>Total Biaya:</span><span id="total-text" class="text-brandPink">Rp 0</span></div>
-      </div>
-      <button onclick="goToCheckout()" class="w-full bg-brandPink text-white py-3.5 rounded-2xl font-bold text-sm hover:bg-[#e05670] shadow-md flex items-center justify-center space-x-2"><span>Lanjut ke Checkout & Pembayaran</span><i class="fa-solid fa-arrow-right"></i></button>
-    </div>
-  </div>
-
-  <!-- CHECKOUT -->
-  <div id="page-checkout" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 space-y-4 hidden space-y-6">
+<!-- UI checkout/pembayaran: nomor WhatsApp, QRIS, Cash, dan upload bukti -->
+<div id="page-checkout" class="hidden max-w-2xl mx-auto px-4 py-8">
+  <a href="#cart" onclick="event.preventDefault(); showOrderPage('cart')" class="inline-block mb-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-brandPink"><i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Keranjang</a>
+  <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 space-y-6">
     <h1 class="text-xl sm:text-2xl font-bold flex items-center border-b border-gray-100 dark:border-slate-700 pb-4"><i class="fa-solid fa-receipt text-brandPink mr-3"></i> Konfirmasi & Pembayaran</h1>
     <div>
       <label class="block font-semibold mb-1">Nomor WhatsApp Pemesan</label>
@@ -65,104 +56,67 @@ tailwind.config={darkMode:'class',theme:{extend:{colors:{brandPink:'#ff758f',bra
       <p class="text-xs text-gray-500 dark:text-gray-300">Scan QRIS di atas untuk membayar via Gopay/OVO/Dana/BCA/Bank lain.</p>
       <div class="text-left pt-2 border-t border-brandBorder/50 dark:border-slate-600">
         <label class="block text-xs font-bold mb-1"><i class="fa-solid fa-file-invoice-dollar text-brandPink mr-1"></i> Upload Bukti Pembayaran:</label>
-        <input type="file" id="payment-proof" accept="image/*" onchange="checkProof(this)" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:font-semibold file:bg-brandPink file:text-white cursor-pointer">
+        <input type="file" id="payment-proof" accept="image/*" onchange="validateProofFile(this)" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:font-semibold file:bg-brandPink file:text-white cursor-pointer">
       </div>
     </div>
     <div class="flex justify-between gap-3 bg-gray-50 dark:bg-slate-700/50 p-4 rounded-2xl"><span>Total Tagihan:</span><b id="final-total" class="text-brandPink text-lg">Rp 0</b></div>
     <button onclick="processOrder()" class="w-full bg-brandPink text-white py-3.5 rounded-2xl font-bold text-sm hover:bg-[#e05670] shadow-md flex items-center justify-center space-x-2"><i class="fa-solid fa-check-circle"></i><span>Bayar & Selesaikan Pesanan</span></button>
   </div>
+</div>
 
-  <!-- STRUK -->
-  <div id="page-success" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 space-y-4 hidden max-w-md mx-auto text-center">
+<!-- halaman hasil checkout dan struk untuk konfirmasi pesanan -->
+<div id="page-success" class="hidden max-w-md mx-auto px-4 py-12">
+  <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 space-y-4 text-center">
     <div class="w-16 h-16 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center mx-auto text-3xl"><i class="fa-solid fa-check"></i></div>
     <h1 class="text-2xl font-bold">Pesanan Berhasil!</h1>
     <p class="text-xs text-gray-500 dark:text-gray-400">Tunjukkan struk digital ini ke kasir kantin atau pengantar pesanan Anda.</p>
     <div id="receipt-details" class="bg-gray-50 dark:bg-slate-700/50 p-4 rounded-2xl text-left space-y-2 text-xs sm:text-sm"></div>
-    <a href="index.html" class="w-full bg-brandPink text-white py-3.5 rounded-2xl font-bold text-sm hover:bg-[#e05670] shadow-md flex items-center justify-center space-x-2">Kembali ke Menu Utama</a>
+    <a href="index.html" class="w-full bg-brandPink text-white py-3.5 rounded-2xl font-bold text-sm hover:bg-[#e05670] shadow-md flex items-center justify-center">Kembali ke Menu Utama</a>
   </div>
-</main>
-
-<footer class="bg-white dark:bg-slate-800 border-t border-gray-100 dark:border-slate-700 py-6 mt-12 text-center text-xs text-gray-500">KantinNinGuys Campus Canteen &copy; 2026</footer>
+</div>
 
 <script>
+// UTILITAS BERSAMA: pembacaan localStorage dan navigasi cart/checkout/success
+function readStorage(key, fallback) {
+  try { const value = localStorage.getItem(key); return value ? JSON.parse(value) : fallback; }
+  catch (error) { console.warn('Data localStorage tidak valid:', key, error); return fallback; }
+}
+function showOrderPage(page) {
+  if (!['cart', 'checkout', 'success'].includes(page)) page = 'cart';
+  if (page === 'checkout' && readStorage('kng_cart', []).length === 0) {
+    alert('Keranjang masih kosong. Silakan pilih menu terlebih dahulu.'); page = 'cart';
+  }
+  ['cart','checkout','success'].forEach(name => {
+    const section = document.getElementById('page-' + name);
+    if (section) section.classList.toggle('hidden', name !== page);
+  });
+  window.scrollTo(0, 0);
+  if (page === 'cart') renderCart();
+  if (page === 'checkout') initCheckout();
+  if (page === 'success') loadReceipt();
+  if (location.hash !== '#' + page) history.replaceState(null, '', '#' + page);
+}
+
+// logika checkout dan pembayaran, validasi nomor, serta validasi/kompresi bukti QRIS
 const $ = id => document.getElementById(id);
 const rp = n => 'Rp ' + (Number(n) || 0).toLocaleString('id-ID');
-const read = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) || d } catch { return d } };
-const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
-const PAGES = ['cart', 'checkout', 'success'];
-let delivery = read('kng_order_config', {}).deliveryMethod || 'pickup', payment = 'QRIS';
+let selectedPayment = 'QRIS';
+let config = readStorage('kng_order_config', {total: 0});
 
-function show(page) {
-  if (!PAGES.includes(page)) page = 'cart';
-  if (page === 'checkout' && !read('kng_cart', []).length) { alert('Keranjang masih kosong. Silakan pilih menu terlebih dahulu.'); page = 'cart'; }
-  PAGES.forEach(p => $('page-' + p).classList.toggle('hidden', p !== page));
-  const co = page === 'checkout';
-  $('back').href = co ? '#cart' : 'index.html';
-  $('back').lastChild.textContent = co ? 'Kembali ke Keranjang' : 'Kembali Ke Menu';
-  scrollTo(0, 0);
-  if (page === 'cart') renderCart();
-  if (co) { $('final-total').innerText = rp(read('kng_order_config', {}).total); setPayment(payment); }
-  if (page === 'success') loadReceipt();
-  history.replaceState(null, '', '#' + page);
+function initCheckout() {
+  config = readStorage('kng_order_config', {total: 0});
+  $('final-total').innerText = rp(config.total);
+  setPayment(selectedPayment);
 }
 
-/* Keranjang */
-function renderCart() {
-  const cart = read('kng_cart', []);
-  document.querySelector(`[name=delivery][value=${delivery}]`).checked = true;
-  $('cart-summary-panel').classList.toggle('hidden', !cart.length);
-  $('cart-container').innerHTML = cart.length ? cart.map((it, i) => `
-    <div class="flex items-center justify-between gap-3 pb-3 border-b border-gray-100 dark:border-slate-700 last:border-0 last:pb-0">
-      <div class="flex items-center space-x-3 min-w-0">
-        <img src="${it.img || ''}" alt="${it.name}" class="w-14 h-14 object-cover rounded-xl">
-        <div><h4 class="font-bold text-sm">${it.name}</h4><p class="text-xs text-brandPink font-semibold">${rp(it.price)}</p></div>
-      </div>
-      <div class="flex items-center space-x-2 shrink-0">
-        <div class="flex items-center space-x-2 bg-gray-100 dark:bg-slate-700 rounded-lg px-2 py-1">
-          <button onclick="updateQty(${i},-1)" class="font-bold px-1.5" aria-label="Kurangi">-</button>
-          <b>${it.qty}</b>
-          <button onclick="updateQty(${i},1)" class="font-bold px-1.5" aria-label="Tambah">+</button>
-        </div>
-        <button onclick="updateQty(${i},-Infinity)" class="text-rose-500" aria-label="Hapus"><i class="fa-solid fa-trash-can"></i></button>
-      </div>
-    </div>`).join('')
-  : `<div class="text-center py-8"><i class="fa-solid fa-basket-shopping text-5xl text-gray-300 dark:text-slate-600 mb-3"></i><p class="text-gray-500 font-medium">Keranjang belanja Anda masih kosong.</p><a href="index.html" class="inline-block mt-4 bg-brandPink text-white px-5 py-2.5 rounded-xl font-bold text-sm">Lihat Menu</a></div>`;
-  if (cart.length) calculateTotal();
+function setPayment(method) {
+  selectedPayment = method;
+  document.querySelector(`[name=payment][value=${method}]`).checked = true;
+  $('qris-section').classList.toggle('hidden', method !== 'QRIS');
 }
 
-function updateQty(i, d) {
-  const cart = read('kng_cart', []);
-  if (!cart[i]) return;
-  cart[i].qty = (Number(cart[i].qty) || 1) + d;
-  if (cart[i].qty <= 0) cart.splice(i, 1);
-  save('kng_cart', cart);
-  renderCart();
-}
-
-function setDelivery(o) { delivery = o; calculateTotal(); }
-
-function calculateTotal() {
-  const subtotal = read('kng_cart', []).reduce((s, i) => s + (Number(i.price) || 0) * (Number(i.qty) || 1), 0);
-  const deliveryCost = delivery === 'delivery' ? 5000 : 0;
-  const discount = subtotal >= 50000 ? 5000 : 0;
-  const total = subtotal + deliveryCost - discount;
-  $('subtotal-text').innerText = rp(subtotal);
-  $('delivery-cost-text').innerText = rp(deliveryCost);
-  $('total-text').innerText = rp(total);
-  $('discount-row').classList.toggle('hidden', !discount);
-  save('kng_order_config', {deliveryMethod: delivery, subtotal, deliveryCost, discount, total});
-}
-
-function goToCheckout() { calculateTotal(); show('checkout'); }
-
-/* Checkout & pembayaran */
-function setPayment(m) {
-  payment = m;
-  document.querySelector(`[name=payment][value=${m}]`).checked = true;
-  $('qris-section').classList.toggle('hidden', m !== 'QRIS');
-}
-
-function checkProof(input) {
+// Bukti harus gambar < 3 MB
+function validateProofFile(input) {
   const f = input.files[0];
   if (f && (!f.type.startsWith('image/') || f.size >= 3 * 1024 * 1024)) {
     alert('Bukti pembayaran harus berupa gambar dengan ukuran kurang dari 3 MB.');
@@ -170,7 +124,8 @@ function checkProof(input) {
   }
 }
 
-const compress = file => new Promise((ok, fail) => {
+// Perkecil & kompres gambar agar muat di localStorage
+const compressProofImage = file => new Promise((ok, fail) => {
   const img = new Image();
   img.onload = () => {
     const s = Math.min(1, 1000 / Math.max(img.width, img.height)), c = document.createElement('canvas');
@@ -183,31 +138,21 @@ const compress = file => new Promise((ok, fail) => {
 });
 
 async function processOrder() {
-  const items = read('kng_cart', []), phone = $('buyer-phone').value.trim();
-  if (!items.length) { alert('Keranjang masih kosong.'); return show('cart'); }
+  const phone = $('buyer-phone').value.trim();
+  if (!readStorage('kng_cart', []).length) { alert('Keranjang masih kosong.'); return showOrderPage('cart'); }
   if (!/^[+0-9][0-9\s-]{7,18}$/.test(phone)) { alert('Isi nomor WhatsApp yang valid untuk notifikasi pesanan!'); return $('buyer-phone').focus(); }
-
-  let paymentProof = null;
-  if (payment === 'QRIS') {
+  let proofImage = null;
+  if (selectedPayment === 'QRIS') {
     const f = $('payment-proof').files[0];
     if (!f) return alert('Silakan unggah foto/screenshot bukti pembayaran QRIS Anda!');
-    try { paymentProof = await compress(f); } catch { return alert('Bukti pembayaran tidak dapat dibuka. Pilih file gambar lain.'); }
+    try { proofImage = await compressProofImage(f); } catch { return alert('Bukti pembayaran tidak dapat dibuka. Pilih file gambar lain.'); }
   }
-
-  const order = {id: 'KNG-' + Math.floor(100000 + Math.random() * 900000), date: new Date().toLocaleString('id-ID'),
-                 phone, payment, paymentProof, items, summary: read('kng_order_config', {})};
-  // Maks. 8 pesanan terbaru; bukti hanya disimpan di pesanan terbaru
-  const history = [order, ...read('kng_history', [])].slice(0, 8).map((o, i) => i ? {...o, paymentProof: undefined} : o);
-  try {
-    save('kng_history', history);
-    save('kng_last_order', {...order, paymentProof: undefined});
-    localStorage.removeItem('kng_cart');
-  } catch { return alert('Penyimpanan browser penuh. Hapus sebagian riwayat pesanan lama, lalu coba lagi.'); }
-  show('success');
+  saveAndRedirect(phone, proofImage);
 }
 
+// menampilkan struk dari data pesanan terakhir
 function loadReceipt() {
-  const o = read('kng_last_order', null);
+  const o = readStorage('kng_last_order', null);
   if (!o) { $('receipt-details').innerHTML = '<p class="text-center text-gray-500">Tidak ada data transaksi terakhir.</p>'; return; }
   const row = (a, b, c = '') => `<div class="flex justify-between gap-3 ${c}"><span>${a}</span><span>${b}</span></div>`;
   $('receipt-details').innerHTML =
@@ -217,9 +162,17 @@ function loadReceipt() {
     row('Total Bayar:', rp(o.summary.total), 'font-bold border-t pt-2 text-brandPink');
 }
 
-const init = () => show(location.hash.slice(1));
-addEventListener('DOMContentLoaded', init);
-addEventListener('hashchange', init);
+// INTEGRASI BERSAMA: inisialisasi halaman dan navigasi berdasarkan hash URL
+document.addEventListener('DOMContentLoaded', () => {
+  const requested = location.hash.replace('#', '');
+  showOrderPage(['cart', 'checkout', 'success'].includes(requested) ? requested : 'cart');
+  setPayment('QRIS');
+});
+window.addEventListener('hashchange', () => {
+  const requested = location.hash.replace('#', '');
+  if (['cart', 'checkout', 'success'].includes(requested)) showOrderPage(requested);
+});
 </script>
+
 </body>
 </html>
