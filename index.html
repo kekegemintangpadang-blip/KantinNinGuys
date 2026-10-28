@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KantinNinGuys - Katalog Menu Kantin Kampus 🌸</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brandPink: '#ff758f',
+                        brandLightPink: '#fff0f3',
+                        brandSoftPink: '#ffb3c1',
+                        brandBorder: '#ffccd5',
+                        textDark: '#2d3748'
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'Quicksand', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- File CSS External -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Pengendali mode gelap global untuk semua halaman -->
+    <script src="js/theme.js"></script>
+    
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-textDark dark:text-gray-100 font-sans antialiased min-h-screen flex flex-col justify-between transition-colors duration-300">
+
+    <!-- Header / Navbar Navigasi -->
+    <header class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md sticky top-0 z-40 border-b border-gray-100 dark:border-slate-700 shadow-sm transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3">
+                <div class="bg-gradient-to-r from-brandPink to-brandSoftPink text-white px-4 py-2.5 rounded-2xl shadow-sm flex items-center space-x-2">
+                    <i class="fa-solid fa-utensils text-lg sm:text-xl"></i>
+                    <span class="font-bold text-base sm:text-lg tracking-wide">KantinNinGuys</span>
+                </div>
+            </a>
+
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <!-- Tombol Dark Mode -->
+                <button onclick="toggleDarkMode()" class="w-10 h-10 sm:w-11 sm:h-11 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-amber-400 rounded-full flex items-center justify-center hover:bg-gray-200 dark:hover:bg-slate-600 transition-all shadow-sm" title="Ganti Mode">
+                    <i id="theme-icon" class="fa-solid fa-moon text-base"></i>
+                </button>
+
+                <!-- Tombol Riwayat -->
+                <a href="history.html" class="hidden sm:flex items-center space-x-2 text-sm font-semibold bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 px-4 py-2.5 rounded-full hover:bg-gray-200 dark:hover:bg-slate-600 transition-all">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>Riwayat</span>
+                </a>
+
+                <!-- Tombol Dashboard Admin Pembayaran (Disembunyikan secara default) -->
+                <a href="admin_pembayaran.html" id="admin-payment-btn" class="hidden items-center space-x-1.5 sm:space-x-2 bg-gray-700 hover:bg-gray-600 dark:bg-slate-600 dark:hover:bg-slate-500 text-white px-3.5 sm:px-4 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all shadow-sm flex">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span class="hidden md:inline">Kelola Pembayaran</span>
+                </a>
+
+                <!-- Tombol Login / Logout / Admin -->
+                <button id="auth-btn" onclick="handleAuthClick()" class="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-200 px-3.5 sm:px-4 py-2.5 rounded-full font-medium shadow-sm hover:border-brandPink transition-all flex items-center space-x-1.5 text-sm">
+                    <i id="auth-btn-icon" class="fa-solid fa-user-circle text-base"></i>
+                    <span id="auth-btn-text">Masuk</span>
+                </button>
+                
+                <!-- Tombol Keranjang -->
+                <a href="order.html#cart" class="relative bg-brandPink text-white px-3.5 sm:px-4 py-2.5 rounded-full font-semibold shadow-sm hover:bg-[#e05670] transition-all flex items-center space-x-2 text-sm">
+                    <i class="fa-solid fa-basket-shopping text-base"></i>
+                    <span class="hidden sm:inline">Keranjang</span>
+                    <span id="cart-count" class="bg-white dark:bg-slate-800 text-brandPink text-xs sm:text-sm font-bold w-5 h-5 sm:w-6 h-6 rounded-full flex items-center justify-center border border-brandPink shadow-sm">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content Utama -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- Banner Promosi -->
+        <section class="relative rounded-3xl p-6 sm:p-10 text-white mb-8 overflow-hidden shadow-md bg-cover bg-center border border-gray-200/20" style="background-image: url('Logo Kawaii KantinNinGuys Penuh Camilan.png');">
+            <div class="absolute inset-0 bg-gradient-to-r from-brandPink/90 via-brandPink/80 to-rose-500/80 dark:from-slate-900/90 dark:via-slate-900/80 dark:to-rose-950/80 backdrop-blur-[1px]"></div>
+
+            <div class="relative z-10 max-w-xl">
+                <span class="bg-amber-300 text-gray-900 text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider mb-3 inline-block shadow-sm">
+                    🎉 PROMO SPESIAL: Diskon Rp 5.000 Min. Belanja 50 Ribu!
+                </span>
+                <h1 class="text-2xl sm:text-4xl font-bold mb-3 leading-tight drop-shadow-sm">
+                    Pesan Makanan Tanpa Perlu Antre Lagi
+                </h1>
+                <p class="text-white/95 text-sm sm:text-base mb-6 font-normal leading-relaxed">
+                    Pilih tenant kantin fakultasmu, tentukan mau Ambil Sendiri atau Diantar, dapatkan promo menariknya!
+                </p>
+                <a href="#katalog-menu" class="bg-white text-brandPink font-semibold px-6 py-3 rounded-full shadow-sm hover:bg-gray-100 transition-all inline-block text-sm">
+                    Lihat Semua Kantin
+                </a>
+            </div>
+        </section>
+
+        <!-- Panel Admin (Tampil Otomatis Jika Login sebagai admin@kantinninguys.com) -->
+        <section id="admin-panel" class="hidden bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border-2 border-brandPink shadow-md mb-8">
+            <div class="flex items-center justify-between mb-5 pb-4 border-b border-gray-100 dark:border-slate-700">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-brandPink text-white w-10 h-10 rounded-xl flex items-center justify-center text-base">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base sm:text-lg text-gray-800 dark:text-gray-100">Panel Kelola Menu Kantin (Admin)</h3>
+                        <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Tambah menu baru ke tenant kantin pilihan secara real-time.</p>
+                    </div>
+                </div>
+                <span class="bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs sm:text-sm px-3 py-1.5 rounded-full font-medium">Admin Aktif</span>
+            </div>
+
+            <form onsubmit="handleAddNewMenu(event)" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs sm:text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Tenant Kantin</label>
+                        <select id="admin-tenant" class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-xl text-sm dark:text-gray-100 focus:ring-2 focus:ring-brandPink focus:outline-none" required>
+                            <option value="feb">Kantin FEB</option>
+                            <option value="pacil">Kantin Pacil</option>
+                            <option value="fkg">Kantin FKG</option>
+                            <option value="fisip">Kantin FISIP</option>
+                            <option value="fib">Kantin FIB</option>
+                            <option value="fkm">Kantin FKM</option>
+                            <option value="psi">Kantin Psikologi</option>
+                            <option value="farmasi">Kantin Farmasi</option>
+                            <option value="hukum">Kantin Hukum</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs sm:text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Nama Menu</label>
+                        <input type="text" id="admin-name" placeholder="Nasi Ayam Geprek" class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-xl text-sm dark:text-gray-100 focus:ring-2 focus:ring-brandPink focus:outline-none" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs sm:text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Kategori</label>
+                        <select id="admin-category" class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-xl text-sm dark:text-gray-100 focus:ring-2 focus:ring-brandPink focus:outline-none">
+                            <option value="makanan-berat">Makanan Berat</option>
+                            <option value="camilan">Camilan</option>
+                            <option value="minuman">Minuman</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs sm:text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Harga (Rp)</label>
+                        <input type="number" id="admin-price" placeholder="15000" class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-xl text-sm dark:text-gray-100 focus:ring-2 focus:ring-brandPink focus:outline-none" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs sm:text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">URL Gambar</label>
+                        <input type="url" id="admin-img" placeholder="https://..." class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-xl text-sm dark:text-gray-100 focus:ring-2 focus:ring-brandPink focus:outline-none" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs sm:text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">Deskripsi Ringkas</label>
+                    <input type="text" id="admin-desc" placeholder="Deskripsi rasa atau porsi..." class="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-xl text-sm dark:text-gray-100 focus:ring-2 focus:ring-brandPink focus:outline-none" required>
+                </div>
+                <div class="text-right pt-2">
+                    <button type="submit" class="bg-brandPink text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#e05670] transition-all">
+                        <i class="fa-solid fa-plus mr-1"></i> Tambahkan ke Kantin
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Filter Tenant Kantin -->
+        <section id="katalog-menu" class="mb-6">
+            <h2 class="text-base sm:text-lg font-bold mb-3 text-gray-800 dark:text-gray-100 flex items-center">
+                <i class="fa-solid fa-store text-brandPink mr-2"></i> Pilih Kantin Fakultas
+            </h2>
+            <div class="flex items-center space-x-3 overflow-x-auto pb-3 pt-1 no-scrollbar">
+                <button onclick="filterTenant('all', this)" class="tenant-btn active bg-brandPink text-white px-5 py-3 rounded-2xl text-sm sm:text-base font-bold transition-all whitespace-nowrap shadow-sm">Semua Kantin</button>
+                <button onclick="filterTenant('feb', this)" class="tenant-btn bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-5 py-3 rounded-2xl text-sm sm:text-base font-semibold hover:border-brandPink transition-all whitespace-nowrap shadow-sm">Kantin FEB</button>
+                <button onclick="filterTenant('pacil', this)" class="tenant-btn bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-5 py-3 rounded-2xl text-sm sm:text-base font-semibold hover:border-brandPink transition-all whitespace-nowrap shadow-sm">Kantin Pacil</button>
+                <button onclick="filterTenant('fkg', this)" class="tenant-btn bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-5 py-3 rounded-2xl text-sm sm:text-base font-semibold hover:border-brandPink transition-all whitespace-nowrap shadow-sm">Kantin FKG</button>
+                <button onclick="filterTenant('fisip', this)" class="tenant-btn bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-5 py-3 rounded-2xl text-sm sm:text-base font-semibold hover:border-brandPink transition-all whitespace-nowrap shadow-sm">Kantin FISIP</button>
+                <button onclick="filterTenant('fib', this)" class="tenant-btn bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-5 py-3 rounded-2xl text-sm sm:text-base font-semibold hover:border-brandPink transition-all whitespace-nowrap shadow-sm">Kantin FIB</button>
+                <button onclick="filterTenant('fkm', this)" class="tenant-btn bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-5 py-3 rounded-2xl text-sm sm:text-base font-semibold hover:border-brandPink transition-all whitespace-nowrap shadow-sm">Kantin FKM</button>
+                <button onclick="filterTenant('psi', this)" class="tenant-btn bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-5 py-3 rounded-2xl text-sm sm:text-base font-semibold hover:border-brandPink transition-all whitespace-nowrap shadow-sm">Kantin Psikologi</button>
+                <button onclick="filterTenant('farmasi', this)" class="tenant-btn bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-5 py-3 rounded-2xl text-sm sm:text-base font-semibold hover:border-brandPink transition-all whitespace-nowrap shadow-sm">Kantin Farmasi</button>
+                <button onclick="filterTenant('hukum', this)" class="tenant-btn bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-5 py-3 rounded-2xl text-sm sm:text-base font-semibold hover:border-brandPink transition-all whitespace-nowrap shadow-sm">Kantin Hukum</button>
+            </div>
+        </section>
+
+        <!-- Pencarian & Kategori -->
+        <section class="mb-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="relative w-full sm:w-80">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 text-sm">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input type="text" id="search-input" onkeyup="renderMenu()" placeholder="Cari makanan atau minuman..." class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl focus:outline-none focus:border-brandPink text-sm dark:text-gray-100">
+                </div>
+
+                <div class="flex items-center space-x-2 w-full sm:w-auto overflow-x-auto no-scrollbar pb-1">
+                    <button onclick="filterCategory('all', this)" class="category-btn active bg-gray-800 dark:bg-slate-700 text-white px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap">Semua Kategori</button>
+                    <button onclick="filterCategory('makanan-berat', this)" class="category-btn bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-gray-300 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium hover:border-brandPink transition-all whitespace-nowrap">Makanan Berat</button>
+                    <button onclick="filterCategory('camilan', this)" class="category-btn bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-gray-300 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium hover:border-brandPink transition-all whitespace-nowrap">Camilan</button>
+                    <button onclick="filterCategory('minuman', this)" class="category-btn bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-gray-300 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium hover:border-brandPink transition-all whitespace-nowrap">Minuman</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grid Katalog Menu Makanan -->
+        <section>
+            <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
+            <div id="empty-state" class="hidden text-center py-12">
+                <i class="fa-solid fa-utensils text-5xl text-gray-300 dark:text-slate-600 mb-3"></i>
+                <p class="text-sm sm:text-base text-gray-500 dark:text-gray-400">Menu tidak ditemukan untuk kriteria ini.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Login -->
+    <div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 relative shadow-xl border border-gray-100 dark:border-slate-700">
+            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="text-center mb-6">
+                <h3 class="font-bold text-lg text-gray-800 dark:text-gray-100">Masuk Akun</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Gunakan email <strong>admin@kantinninguys.com</strong> atau <strong>admin@kantin.com</strong> untuk akses panel admin</p>
+            </div>
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                    <input type="email" id="login-email" placeholder="nama@email.com" class="w-full px-3.5 py-2.5 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-100 rounded-xl text-sm focus:ring-2 focus:ring-brandPink focus:outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Kata Sandi</label>
+                    <input type="password" id="login-password" placeholder="••••••••" class="w-full px-3.5 py-2.5 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-gray-100 rounded-xl text-sm focus:ring-2 focus:ring-brandPink focus:outline-none" required>
+                </div>
+                <button type="submit" class="w-full bg-brandPink text-white py-3 rounded-xl font-semibold text-sm hover:bg-[#e05670] transition-all">
+                    Masuk
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-800 border-t border-gray-100 dark:border-slate-700 py-6 mt-12 text-center text-xs text-gray-500 dark:text-gray-400">
+        <p>KantinNinGuys Campus Canteen &copy; 2026 • Layanan Pesan Antar Kantin Kampus</p>
+    </footer>
+
+    <!-- File JavaScript External -->
+    <script src="js/app.js"></script>
+    <script>
+        // Logika Pengendali Admin dan Login
+        function openLoginModal() {
+            document.getElementById('login-modal').classList.remove('hidden');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').classList.add('hidden');
+        }
+
+        // Pengendali Klik Tombol Autentikasi (Masuk / Keluar)
+        function handleAuthClick() {
+            const currentUser = JSON.parse(localStorage.getItem('kng_user'));
+            if (currentUser) {
+                if (confirm('Apakah Kakak yakin ingin keluar / logout dari akun ini?')) {
+                    handleLogout();
+                }
+            } else {
+                openLoginModal();
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            // Deteksi jika email memiliki kata "admin" di dalamnya
+            const currentUser = { email: email, isAdmin: email.includes('admin') };
+            localStorage.setItem('kng_user', JSON.stringify(currentUser));
+            closeLoginModal();
+            checkAdminStatus();
+            alert("Berhasil masuk!");
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('kng_user');
+            checkAdminStatus();
+            alert("Berhasil keluar!");
+        }
+
+        function checkAdminStatus() {
+            const adminPanel = document.getElementById('admin-panel');
+            const adminPaymentBtn = document.getElementById('admin-payment-btn');
+            const authText = document.getElementById('auth-btn-text');
+            const authIcon = document.getElementById('auth-btn-icon');
+            const currentUser = JSON.parse(localStorage.getItem('kng_user'));
+
+            if (currentUser) {
+                const username = currentUser.email.split('@')[0];
+                if (authText) authText.innerText = `${username} (Keluar)`;
+                if (authIcon) authIcon.className = "fa-solid fa-right-from-bracket text-base text-rose-500";
+                
+                if (currentUser.isAdmin) {
+                    if (adminPanel) adminPanel.classList.remove('hidden');
+                    if (adminPaymentBtn) {
+                        adminPaymentBtn.classList.remove('hidden');
+                        adminPaymentBtn.classList.add('flex');
+                    }
+                } else {
+                    if (adminPanel) adminPanel.classList.add('hidden');
+                    if (adminPaymentBtn) {
+                        adminPaymentBtn.classList.add('hidden');
+                        adminPaymentBtn.classList.remove('flex');
+                    }
+                }
+            } else {
+                if (authText) authText.innerText = "Masuk";
+                if (authIcon) authIcon.className = "fa-solid fa-user-circle text-base";
+                if (adminPanel) adminPanel.classList.add('hidden');
+                if (adminPaymentBtn) {
+                    adminPaymentBtn.classList.add('hidden');
+                    adminPaymentBtn.classList.remove('flex');
+                }
+            }
+        }
+
+        function handleAddNewMenu(e) {
+            e.preventDefault();
+            const data = typeof getStoredMenu === 'function' ? getStoredMenu() : (JSON.parse(localStorage.getItem('kng_custom_menu')) || []);
+            const newMenu = {
+                id: Date.now().toString(),
+                tenant: document.getElementById('admin-tenant').value,
+                name: document.getElementById('admin-name').value,
+                category: document.getElementById('admin-category').value,
+                price: parseInt(document.getElementById('admin-price').value),
+                img: document.getElementById('admin-img').value,
+                desc: document.getElementById('admin-desc').value
+            };
+            data.unshift(newMenu);
+            localStorage.setItem('kng_custom_menu', JSON.stringify(data));
+            if (typeof renderMenu === 'function') renderMenu();
+            alert("Menu baru berhasil ditambahkan ke kantin!");
+            e.target.reset();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAdminStatus();
+        });
+    </script>
+</body>
+</html>
